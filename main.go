@@ -1,14 +1,23 @@
 package main
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+)
 
 func main() {
 	mux := http.NewServeMux()
+
 	webDir := "./web"
+
 	mux.Handle("/", http.FileServer(http.Dir(webDir)))
 
-	err := http.ListenAndServe(":7540", mux)
-	if err != nil {
-		panic(err)
+	err := godotenv.Load()
+	port := ":" + os.Getenv("TODO_PORT")
+	if err = http.ListenAndServe(port, mux); err != nil {
+		log.Fatal(err)
 	}
 }
