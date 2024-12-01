@@ -1,14 +1,15 @@
 package main
 
 import (
+	"github.com/DKDemerchyan/todo-list/database"
+	"github.com/DKDemerchyan/todo-list/handlers"
+	"github.com/go-chi/chi/v5"
+	"github.com/joho/godotenv"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
-
-	"github.com/DKDemerchyan/todo-list/database"
-	"github.com/joho/godotenv"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	// Database connection
 	appPath, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
@@ -28,13 +30,17 @@ func main() {
 	}
 	defer db.Close()
 
-	mux := http.NewServeMux()
+	// Routing
 	webDir := "./web"
+	fileServer := http.FileServer(http.Dir(webDir))
 
-	mux.Handle("/", http.FileServer(http.Dir(webDir)))
+	router := chi.NewRouter()
+
+	router.Mount("/", fileServer)
+	router.Get("/api/nextdate", handlers.NextDate)
 
 	port := ":" + os.Getenv("TODO_PORT")
-	if err := http.ListenAndServe(port, mux); err != nil {
+	if err := http.ListenAndServe(port, router); err != nil {
 		log.Fatal(err)
 	}
 }
