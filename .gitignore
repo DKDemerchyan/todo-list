@@ -27,3 +27,6 @@ Thumbs.db
 
 # Other files to ignore
 .env
+
+# Database files
+*.db
