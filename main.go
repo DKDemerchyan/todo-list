@@ -29,6 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
+	store := database.NewTaskStore(db)
 
 	// Routing
 	webDir := "./web"
@@ -38,6 +39,7 @@ func main() {
 
 	router.Mount("/", fileServer)
 	router.Get("/api/nextdate", handlers.NextDate)
+	router.Post("/api/task", handlers.CreateTask(store))
 
 	port := ":" + os.Getenv("TODO_PORT")
 	if err := http.ListenAndServe(port, router); err != nil {
