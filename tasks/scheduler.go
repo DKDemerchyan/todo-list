@@ -10,6 +10,7 @@ import (
 const DateFormat = "20060102"
 
 func NextDate(now time.Time, date string, repeat string) (string, error) {
+	now = now.Truncate(24 * time.Hour) // Избавляюсь от точного времени для корректного сравнения дат
 	taskStartDate, err := time.Parse(DateFormat, date)
 	if err != nil {
 		return "", err
@@ -22,8 +23,8 @@ func NextDate(now time.Time, date string, repeat string) (string, error) {
 			return "", err
 		}
 
-		nextDate := taskStartDate.AddDate(0, 0, daysToAdd)
-		for nextDate.Before(now) {
+		nextDate := taskStartDate
+		for nextDate.Before(now) && !nextDate.Equal(now) {
 			nextDate = nextDate.AddDate(0, 0, daysToAdd)
 		}
 		return nextDate.Format(DateFormat), nil
