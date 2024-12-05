@@ -31,3 +31,27 @@ func (ts TaskStore) CreateTask(task tasks.Task) (string, error) {
 
 	return fmt.Sprintf("%d", id), nil
 }
+
+func (ts TaskStore) GetAllTasks() ([]tasks.Task, error) {
+	rows, err := ts.db.Query("SELECT * FROM scheduler ORDER BY date ASC LIMIT 50")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var res []tasks.Task
+	for rows.Next() {
+		t := tasks.Task{}
+		err = rows.Scan(&t.ID, &t.Date, &t.Title, &t.Comment, &t.Repeat)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, t)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

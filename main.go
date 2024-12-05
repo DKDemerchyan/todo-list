@@ -39,6 +39,7 @@ func main() {
 
 	router.Mount("/", fileServer)
 	router.Get("/api/nextdate", handlers.NextDate)
+	router.Get("/api/tasks", handlers.GetTasks(store))
 	router.Post("/api/task", handlers.CreateTask(store))
 
 	port := ":" + os.Getenv("TODO_PORT")
