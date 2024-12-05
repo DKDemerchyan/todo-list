@@ -83,7 +83,7 @@ func validateTask(task *tasks.Task) error {
 			return err
 		}
 
-		if taskDate.Before(time.Now()) {
+		if taskDate.Format(tasks.DateFormat) < time.Now().Format(tasks.DateFormat) {
 			task.Date = nextDate
 		}
 	}

@@ -7,14 +7,12 @@ import (
 )
 
 func NextDate(writer http.ResponseWriter, r *http.Request) {
-	strNow := r.FormValue("now")
-	date := r.FormValue("date")
-	repeat := r.FormValue("repeat")
-
-	now, err := time.Parse(tasks.DateFormat, strNow)
+	now, err := time.Parse(tasks.DateFormat, r.FormValue("now"))
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 	}
+	date := r.FormValue("date")
+	repeat := r.FormValue("repeat")
 
 	nextDate, err := tasks.NextDate(now, date, repeat)
 	if err != nil {
