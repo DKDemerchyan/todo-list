@@ -15,7 +15,6 @@ func NewTaskStore(db *sql.DB) TaskStore {
 }
 
 func (ts TaskStore) CreateTask(task tasks.Task) (string, error) {
-	fmt.Printf("Ща добавлю: title-%s, date-%s, comment-%s, repeat-%s\n\n", task.Title, task.Date, task.Comment, task.Repeat)
 	res, err := ts.db.Exec("INSERT INTO scheduler (date, title, comment, repeat) VALUES (:date, :title, :comment, :repeat)",
 		sql.Named("date", task.Date),
 		sql.Named("title", task.Title),
@@ -29,6 +28,6 @@ func (ts TaskStore) CreateTask(task tasks.Task) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	fmt.Println(id)
+
 	return fmt.Sprintf("%d", id), nil
 }
