@@ -31,7 +31,7 @@ func CreateTask(ts database.TaskStore) http.HandlerFunc {
 			return
 		}
 
-		if err = validateTask(&task); err != nil {
+		if err = validateTaskOnCreate(&task); err != nil {
 			http.Error(writer, errToJSON(err), http.StatusBadRequest)
 			return
 		}
@@ -54,7 +54,7 @@ func CreateTask(ts database.TaskStore) http.HandlerFunc {
 	}
 }
 
-func validateTask(task *tasks.Task) error {
+func validateTaskOnCreate(task *tasks.Task) error {
 	if len(task.Title) < 1 {
 		return errors.New("title must not be empty")
 	}
@@ -89,12 +89,4 @@ func validateTask(task *tasks.Task) error {
 	}
 
 	return nil
-}
-
-func errToJSON(err error) string {
-	jsonErr, err := json.Marshal(map[string]string{"error": err.Error()})
-	if err != nil {
-		return ""
-	}
-	return string(jsonErr)
 }
