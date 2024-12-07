@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/DKDemerchyan/todo-list/tasks"
 )
@@ -54,4 +55,16 @@ func (ts TaskStore) GetAllTasks() ([]tasks.Task, error) {
 	}
 
 	return res, nil
+}
+
+func (ts TaskStore) GetTaskByID(id string) (tasks.Task, error) {
+	row := ts.db.QueryRow("SELECT * FROM scheduler WHERE id = $1", id)
+
+	task := tasks.Task{}
+	err := row.Scan(&task.ID, &task.Date, &task.Title, &task.Comment, &task.Repeat)
+	if err != nil {
+		return task, errors.New("there is no task with that id")
+	}
+
+	return task, nil
 }
