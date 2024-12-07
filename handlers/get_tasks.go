@@ -21,6 +21,7 @@ func GetTasks(ts database.TaskStore) http.HandlerFunc {
 		response, err := json.Marshal(map[string][]tasks.Task{"tasks": allTasks})
 		if err != nil {
 			http.Error(writer, errToJSON(err), http.StatusBadRequest)
+			return
 		}
 
 		writer.Header().Set("Content-Type", "application/json")
