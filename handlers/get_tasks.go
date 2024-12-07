@@ -24,7 +24,7 @@ func GetTasks(ts database.TaskStore) http.HandlerFunc {
 			return
 		}
 
-		writer.Header().Set("Content-Type", "application/json")
+		writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		writer.WriteHeader(http.StatusOK)
 		_, _ = writer.Write(response)
 	}
