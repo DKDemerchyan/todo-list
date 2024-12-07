@@ -40,8 +40,9 @@ func main() {
 	router.Mount("/", fileServer)
 	router.Get("/api/nextdate", handlers.NextDate)
 	router.Get("/api/task", handlers.GetTask(store))
-	router.Get("/api/tasks", handlers.GetTasks(store))
 	router.Post("/api/task", handlers.CreateTask(store))
+	router.Put("/api/task", handlers.UpdateTask(store))
+	router.Get("/api/tasks", handlers.GetTasks(store))
 
 	port := ":" + os.Getenv("TODO_PORT")
 	if err := http.ListenAndServe(port, router); err != nil {

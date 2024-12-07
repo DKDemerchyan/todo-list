@@ -68,3 +68,17 @@ func (ts TaskStore) GetTaskByID(id string) (tasks.Task, error) {
 
 	return task, nil
 }
+
+func (ts TaskStore) UpdateTask(task tasks.Task) error {
+	_, err := ts.db.Exec(
+		"UPDATE scheduler SET date = :date, title = :title, comment = :comment, repeat = :repeat WHERE id = :id",
+		sql.Named("date", task.Date),
+		sql.Named("title", task.Title),
+		sql.Named("comment", task.Comment),
+		sql.Named("repeat", task.Repeat),
+		sql.Named("id", task.ID))
+	if err != nil {
+		return err
+	}
+	return nil
+}
