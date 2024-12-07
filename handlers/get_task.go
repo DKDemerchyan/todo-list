@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/DKDemerchyan/todo-list/database"
 	"net/http"
 )
@@ -9,6 +10,11 @@ import (
 func GetTask(ts database.TaskStore) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		id := request.URL.Query().Get("id")
+		if id == "" {
+			err := errors.New("task id is required")
+			http.Error(writer, errToJSON(err), http.StatusBadRequest)
+			return
+		}
 
 		task, err := ts.GetTaskByID(id)
 		if err != nil {
