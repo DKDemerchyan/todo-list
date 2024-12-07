@@ -11,5 +11,7 @@ type Task struct {
 }
 
 func (task Task) String() string {
-	return fmt.Sprintf("ID: %s, Date: %s, Title: %s, Comment: %s", task.ID, task.Date, task.Title, task.Comment)
+	return fmt.Sprintf(
+		"ID: %s, Date: %s, Title: %s, Comment: %s, Repeat: %s",
+		task.ID, task.Date, task.Title, task.Comment, task.Repeat)
 }
