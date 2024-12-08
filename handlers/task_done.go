@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/DKDemerchyan/todo-list/database"
 	"github.com/DKDemerchyan/todo-list/tasks"
 	"net/http"
@@ -16,9 +15,8 @@ func TaskDone(ts database.TaskStore) http.HandlerFunc {
 			http.Error(writer, errToJSON(err), http.StatusBadRequest)
 			return
 		}
-		fmt.Println(task, task.Repeat)
+
 		if task.Repeat == "" {
-			fmt.Println("should be here")
 			err = ts.DeleteTask(task.ID)
 			if err != nil {
 				http.Error(writer, errToJSON(err), http.StatusBadRequest)
