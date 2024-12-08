@@ -33,8 +33,21 @@ func (ts TaskStore) CreateTask(task tasks.Task) (string, error) {
 	return fmt.Sprintf("%d", id), nil
 }
 
-func (ts TaskStore) GetAllTasks() ([]tasks.Task, error) {
-	rows, err := ts.db.Query("SELECT * FROM scheduler ORDER BY date ASC LIMIT 50")
+func (ts TaskStore) GetTasks(search string, searchCase string) ([]tasks.Task, error) {
+	var resLimit = 50
+	var rows *sql.Rows
+	var err error
+
+	switch searchCase { // we return all tasks for text search cases because of disability to LOWER(RUS)
+	case "no search":
+		rows, err = ts.db.Query("SELECT * FROM scheduler ORDER BY date ASC LIMIT ?", resLimit)
+	case "text":
+		rows, err = ts.db.Query("SELECT * FROM scheduler ORDER BY date ASC")
+	case "date":
+		rows, err = ts.db.Query("SELECT * FROM scheduler WHERE date LIKE ? ORDER BY date ASC LIMIT ?",
+			search, resLimit)
+	}
+
 	if err != nil {
 		return nil, err
 	}
