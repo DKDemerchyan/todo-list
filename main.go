@@ -42,6 +42,8 @@ func main() {
 	router.Get("/api/task", handlers.GetTask(store))
 	router.Post("/api/task", handlers.CreateTask(store))
 	router.Put("/api/task", handlers.UpdateTask(store))
+	router.Delete("/api/task", handlers.DeleteTask(store))
+	router.Post("/api/task/done", handlers.TaskDone(store))
 	router.Get("/api/tasks", handlers.GetTasks(store))
 
 	port := ":" + os.Getenv("TODO_PORT")

@@ -82,3 +82,20 @@ func (ts TaskStore) UpdateTask(task tasks.Task) error {
 	}
 	return nil
 }
+
+func (ts TaskStore) DeleteTask(id string) error {
+	res, err := ts.db.Exec("DELETE FROM scheduler WHERE id = $1", id)
+	if err != nil {
+		return err
+	}
+
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rows == 0 {
+		return errors.New("there is no task with that id")
+	}
+
+	return nil
+}
