@@ -23,7 +23,6 @@ func main() {
 		log.Fatal(err)
 	}
 	dbFile := filepath.Join(appPath, os.Getenv("TODO_DBFILE"))
-
 	db, err := database.ConnectDB(dbFile)
 	if err != nil {
 		log.Fatal(err)
