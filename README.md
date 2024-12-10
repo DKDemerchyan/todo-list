@@ -49,3 +49,5 @@
 3. Запустить докер-контейнер \
 `docker build -t todo:latest .` \
 `docker run -d -p 7540:7540  todo:latest`
+
+4. Открыть `localhost:7540`
