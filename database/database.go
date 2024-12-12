@@ -8,7 +8,7 @@ import (
 func ConnectDB(dbFile string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", dbFile)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Sprintf("error while openning %s: %w", dbFile, err)
 	}
 
 	_, err = os.Stat(dbFile)
