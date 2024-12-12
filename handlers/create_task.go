@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/DKDemerchyan/todo-list/database"
 	"github.com/DKDemerchyan/todo-list/tasks"
+	"log"
 	"net/http"
 	"time"
 )
@@ -13,6 +14,8 @@ import (
 type TaskID struct {
 	ID string `json:"id"`
 }
+
+const clientCreateErr = "ошибка при создании задачи"
 
 func CreateTask(ts database.TaskStore) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
@@ -38,19 +41,26 @@ func CreateTask(ts database.TaskStore) http.HandlerFunc {
 
 		id, err := ts.CreateTask(task)
 		if err != nil {
-			http.Error(writer, errToJSON(err), http.StatusBadRequest)
+			log.Printf(err.Error())
+			err = errors.New(clientCreateErr)
+			http.Error(writer, errToJSON(err), http.StatusInternalServerError)
 			return
 		}
 
 		response, err := json.Marshal(TaskID{ID: id})
 		if err != nil {
-			http.Error(writer, errToJSON(err), http.StatusBadRequest)
+			log.Printf(err.Error())
+			err = errors.New(clientCreateErr)
+			http.Error(writer, errToJSON(err), http.StatusInternalServerError)
 			return
 		}
 
 		writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		writer.WriteHeader(http.StatusCreated)
-		_, _ = writer.Write(response)
+		_, err = writer.Write(response)
+		if err != nil {
+			log.Printf(err.Error())
+		}
 	}
 }
 

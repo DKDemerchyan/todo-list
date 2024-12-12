@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/DKDemerchyan/todo-list/tasks"
+	"log"
 	"net/http"
 	"time"
 )
@@ -19,5 +20,8 @@ func NextDate(writer http.ResponseWriter, r *http.Request) {
 		_, _ = writer.Write([]byte(err.Error()))
 	}
 
-	_, _ = writer.Write([]byte(nextDate))
+	_, err = writer.Write([]byte(nextDate))
+	if err != nil {
+		log.Println(err.Error())
+	}
 }

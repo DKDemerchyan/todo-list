@@ -33,6 +33,7 @@ func main() {
 	// Routing
 	router := setupRouter(store)
 	port := ":" + os.Getenv("TODO_PORT")
+	log.Printf("Listening on port %s", port)
 	if err := http.ListenAndServe(port, router); err != nil {
 		log.Fatal(err)
 	}

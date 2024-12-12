@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/DKDemerchyan/todo-list/database"
 	"github.com/DKDemerchyan/todo-list/tasks"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -28,6 +29,7 @@ func GetTasks(ts database.TaskStore) http.HandlerFunc {
 		allTasks, err := ts.GetTasks(search, searchCase)
 		if err != nil {
 			http.Error(writer, errToJSON(err), http.StatusBadRequest)
+			return
 		}
 
 		if allTasks == nil {
@@ -46,7 +48,10 @@ func GetTasks(ts database.TaskStore) http.HandlerFunc {
 
 		writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		writer.WriteHeader(http.StatusOK)
-		_, _ = writer.Write(response)
+		_, err = writer.Write(response)
+		if err != nil {
+			log.Printf(err.Error())
+		}
 	}
 }
 
