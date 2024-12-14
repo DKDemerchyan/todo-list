@@ -59,7 +59,7 @@ func CreateTask(ts database.TaskStore) http.HandlerFunc {
 		writer.WriteHeader(http.StatusCreated)
 		_, err = writer.Write(response)
 		if err != nil {
-			log.Printf(err.Error())
+			log.Printf("error while writing request in CreateTask: %v, err)
 		}
 	}
 }
